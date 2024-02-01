@@ -12,13 +12,32 @@ class Block(pygame.sprite.Sprite):
         super().__init__(self.tetramino.tetris.tetramino_list)
         self.image = tetramino.image
         self.sfx_image = self.image.copy()
-        self.sfx_image.set_alpha()
+        self.sfx_image.set_alpha(110)
+        self.sfx_speed = random.uniform(0.2, 0.6)
+        self.sfx_cycles = random.randint(6, 8)
+        self.cycle_counter = 0
         self.rect = self.image.get_rect()
         self.alive = True
+    
+    def sfx_end_time(self):
+        if self.tetramino.tetris.window.anim_triger:
+            self.cycle_counter += 1
+            if self.cycle_counter > self.sfx_cycles:
+                self.cycle_counter = 0
+                return True
+        
+    def sfx_run(self):
+        self.image = self.sfx_image
+        self.pos.y -= self.sfx_speed
+        self.image = pygame.transform.rotate(self.image, pygame.time.get_ticks()*self.sfx_speed)
+        
         
     def is_alive(self):
         if not self.alive:
-            self.kill()
+            if not self.sfx_end_time():
+                self.sfx_run()
+            else:
+                self.kill()
 
     def set_rect_pos(self):
         pos = [self.next_pos, self.pos][self.tetramino.current]
@@ -49,6 +68,7 @@ class Tetramino:
         self.blocks = []
         self.blocks = [Block(self, pos) for pos in TETROMINOES[self.shape]]
         self.landing = False
+        self.speed = ANIM_DELAY
         
     def rotate(self):
         pivot = self.blocks[0].pos

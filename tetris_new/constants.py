@@ -14,6 +14,7 @@ ANIM_DELAY = 400
 FAST_ANIM_DELAY = 20
 
 FONT_PATH = "tetris_new/shrift.ttf"
+RECORD_FILE = "tetris_new/record.txt"
 
 # colors
 BG_COLOR = ANTIQUE_BRASS

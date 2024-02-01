@@ -16,18 +16,30 @@ class Text:
         self.font.render_to(self.window.screen, (SCREEN_WIDTH * 0.66, SCREEN_HEIGHT * 0.22),
                             text='next', fgcolor='orange',
                             size=TILE_SIZE * 1.2)
-        self.font.render_to(self.window.screen, (SCREEN_WIDTH * 0.62, SCREEN_HEIGHT * 0.6),
-                            text='score', fgcolor='orange',
-                            size=TILE_SIZE * 1.2)
-        self.font.render_to(self.window.screen, (SCREEN_WIDTH * 0.62, SCREEN_HEIGHT * 0.7),
+        self.font.render_to(self.window.screen, (SCREEN_WIDTH * 0.6, SCREEN_HEIGHT * 0.6),
+                            text='Score', fgcolor='orange',
+                            size=TILE_SIZE * 0.5)
+        self.font.render_to(self.window.screen, (SCREEN_WIDTH * 0.62, SCREEN_HEIGHT * 0.65),
                             text=f'{self.window.tetris.points}', fgcolor='white',
-                            size=TILE_SIZE * 1.6)
-        self.font.render_to(self.window.screen, (SCREEN_WIDTH * 0.62, SCREEN_HEIGHT * 0.8),
-                            text='record', fgcolor='orange',
-                            size=TILE_SIZE * 1.05)
-        self.font.render_to(self.window.screen, (SCREEN_WIDTH * 0.62, SCREEN_HEIGHT * 0.9),
-                            text=f'0', fgcolor='white',
-                            size=TILE_SIZE * 1.6)
+                            size=TILE_SIZE * 1.1)
+        self.font.render_to(self.window.screen, (SCREEN_WIDTH * 0.8, SCREEN_HEIGHT * 0.598),
+                            text='Record', fgcolor='orange',
+                            size=TILE_SIZE * 0.5)
+        self.font.render_to(self.window.screen, (SCREEN_WIDTH * 0.82, SCREEN_HEIGHT * 0.6498),
+                            text=f'{self.window.tetris.record}', fgcolor='white',
+                            size=TILE_SIZE * 1.1)
+        self.font.render_to(self.window.screen, (SCREEN_WIDTH * 0.6, SCREEN_HEIGHT * 0.8),
+                            text='Lines', fgcolor='orange',
+                            size=TILE_SIZE * 0.5)
+        self.font.render_to(self.window.screen, (SCREEN_WIDTH * 0.8, SCREEN_HEIGHT * 0.8),
+                            text='Level', fgcolor='orange',
+                            size=TILE_SIZE * 0.5)
+        self.font.render_to(self.window.screen, (SCREEN_WIDTH * 0.62, SCREEN_HEIGHT * 0.85),
+                            text=f'{self.window.tetris.full_lines}', fgcolor='white',
+                            size=TILE_SIZE * 1.1)
+        self.font.render_to(self.window.screen, (SCREEN_WIDTH * 0.82, SCREEN_HEIGHT * 0.85),
+                            text=f'{self.window.tetris.level}', fgcolor='white',
+                            size=TILE_SIZE * 1.1)
 
 class Tetris:
     def __init__(self, window) -> None:
@@ -38,6 +50,24 @@ class Tetris:
         self.next_tetramino = Tetramino(self, current=False)
         self.speed_up = False
         self.points = 0
+        self.record = self.read_record()
+        self.full_lines = 0
+        self.level = 1
+        
+    def write_record(self, record: int):
+        with open(RECORD_FILE, "w", encoding="utf-8") as file:
+            file.write(f"{record}")
+
+    def read_record(self):
+        if not os.path.exists(RECORD_FILE):
+            return 0
+        with open(RECORD_FILE, "r", encoding="utf-8") as file:
+            return int(file.read())
+        
+    def check_record(self):
+        if self.points > self.record:
+            self.record = self.points
+        self.level = self.full_lines//10 + 1
     
     def check_full_lines(self):
         row = FIELD_H - 1
@@ -49,6 +79,7 @@ class Tetris:
             if sum(map(bool, self.field[y])) < FIELD_W:
                 row -= 1
             else:
+                self.full_lines+=1
                 for x in range(FIELD_W):
                     self.field[row][x].alive = False
                     self.field[row][x] = 0
@@ -84,6 +115,7 @@ class Tetris:
     def check_tetramino_landing(self):
         if self.tetramino.landing:
             if self.is_game_over():
+                self.write_record(self.record)
                 self.__init__(self.window)
             else:
                 self.points+=1
@@ -100,6 +132,7 @@ class Tetris:
     def update(self):
         trigger = [self.window.anim_triger, self.window.fast_anim_triger][self.speed_up]
         if trigger:
+            self.check_record()
             self.tetramino.update()
             self.check_full_lines()
             self.check_tetramino_landing()

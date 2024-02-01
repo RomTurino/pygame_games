@@ -38,7 +38,10 @@ class GameWindow:
         self.fast_user_event = pygame.USEREVENT + 2
         self.anim_triger = False
         self.fast_anim_triger = False
-        pygame.time.set_timer(self.user_event, ANIM_DELAY)
+        try:
+            pygame.time.set_timer(self.user_event, self.tetris.tetramino.speed - self.tetris.level*10)
+        except:
+            pygame.time.set_timer(self.user_event, ANIM_DELAY)
         pygame.time.set_timer(self.fast_user_event, FAST_ANIM_DELAY)
 
     def on_key_press(self, event):
@@ -58,6 +61,7 @@ class GameWindow:
             self.fast_anim_triger = False
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
+                    self.tetris.write_record(self.tetris.record)
                     RUNNING = False
                 self.on_key_press(event)
                 if event.type == self.user_event:
