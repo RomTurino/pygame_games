@@ -1,0 +1,25 @@
+SCREEN_WIDTH = 600
+SCREEN_HEIGHT = 600
+SCREEN_TITLE = "Змейка"
+FPS = 30
+
+BG_IMG = "snake/images/ground.png"
+FOOD_IMG = "snake/images/egg.png"
+FOOD_SCALE = 0.015
+FOOD_DELAY_SEC = 7
+
+SNAKE_MOVEMENT_DELAY_SEC = 0.5
+SNAKE_INITIAL_LENGTH = 1
+
+BARRIER_IMG = "snake/images/barrier.png"
+BARRIER_SCALE = 0.025
+
+
+ROW_COUNT = 15
+COLUMN_COUNT = 15
+TILE_WIDTH = SCREEN_WIDTH//COLUMN_COUNT
+TILE_HEIGHT = SCREEN_HEIGHT//ROW_COUNT
+
+
+RECORD_FILE = "snake/record.txt"
+FONT_FILE = "snake/fonts/RussoOne-Regular.ttf"
