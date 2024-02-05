@@ -24,10 +24,9 @@ class Dino(MySprite):
     def update(self):
         # if self.rect.bottom < self.window.road.rect.bottom:
         if self.dino_jump:
-            if self.window.jump_triger:
-                self.rect.centery -= self.velocity
-                self.velocity -= GRAVITY
-                if self.velocity < -JUMP_HEIGHT:
-                    self.dino_jump = False
-                    self.velocity = JUMP_HEIGHT
+            self.rect.centery -= self.velocity
+            self.velocity -= GRAVITY
+            if self.velocity < -JUMP_HEIGHT:
+                self.dino_jump = False
+                self.velocity = JUMP_HEIGHT
         

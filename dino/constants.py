@@ -16,13 +16,13 @@ LITTLE_CACTUS_FILENAMES = [path.join(IMG_DIR, f"cactus{i}.png") for i in range(1
 BIG_CACTUS_FILENAMES = [path.join(IMG_DIR, f"bigcactus{i}.png") for i in range(1, 6)]
 INIT_CACTUS_FILENAME = path.join(IMG_DIR, "cactus2.png")
 CACTUS_SCALE = 1
-CACTUS_SPEED = 1
+CACTUS_SPEED = 10
 ANIM_DELAY = 4
 
 # road
 ROAD_IMG = path.join(IMG_DIR, "road.png")
 ROAD_SCALE = 1
-ROAD_SPEED = 1
+ROAD_SPEED = 10
 ROAD_DELAY = 4
 
 
